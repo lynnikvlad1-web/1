@@ -15,7 +15,7 @@ document.getElementById('getWeatherBtn').addEventListener('click', function () {
 
   // Запрос к OpenWeatherMap API
   const apiKey = 'a6e52742e64c1a2f229380e7998ccabb'; // Замените на ваш API Key
-  const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+  const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=ru`;
 
   fetch(apiUrl)
     .then(response => response.json())
@@ -37,4 +37,5 @@ document.getElementById('getWeatherBtn').addEventListener('click', function () {
       console.error('Ошибка:', error);
       document.getElementById('weatherInfo').innerHTML = `<p>Произошла ошибка. Попробуйте позже.</p>`;
     });
+
 });
