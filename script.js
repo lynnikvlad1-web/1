@@ -57,11 +57,8 @@ async function updateFavoritesList() {
         container.appendChild(cityName);
       }
 
-      // Добавляем обработчик клика для показа погоды
-      container.onclick = () => getWeatherForCity(city);
-
-      // Добавляем обработчики для удаления
-      setupDeleteHandlers(container, city);
+      // Добавляем обработчики для взаимодействия
+      setupEventHandlers(container, city);
 
       favoritesList.appendChild(container);
     } catch (error) {
@@ -136,33 +133,45 @@ function removeFromFavorites(city) {
   updateFavoritesList(); // Обновляем список на странице
 }
 
-// Функция для настройки обработчиков удаления
-function setupDeleteHandlers(container, city) {
+// Функция для настройки обработчиков событий
+function setupEventHandlers(container, city) {
   let isMobile = /Mobi|Android/i.test(navigator.userAgent); // Проверка, мобильное ли устройство
+  let isLongPress = false; // Флаг для долгого нажатия
+  let pressTimer;
 
   if (isMobile) {
-    let pressTimer;
-
     // При начале касания запускаем таймер
     container.addEventListener('touchstart', (e) => {
       e.preventDefault(); // Предотвращаем стандартное поведение
-      pressTimer = setTimeout(() => showConfirmationPopup(city), 1000); // 1 секунда
+      pressTimer = setTimeout(() => {
+        isLongPress = true; // Устанавливаем флаг долгого нажатия
+        showConfirmationPopup(city); // Показываем уведомление об удалении
+      }, 1000); // 1 секунда
     });
 
     // При окончании касания очищаем таймер
-    container.addEventListener('touchend', () => clearTimeout(pressTimer));
+    container.addEventListener('touchend', () => {
+      clearTimeout(pressTimer);
+      if (!isLongPress) {
+        getWeatherForCity(city); // Если не было долгого нажатия, показываем погоду
+      }
+      isLongPress = false; // Сбрасываем флаг
+    });
 
     // Если пользователь убирает палец с элемента, также очищаем таймер
-    container.addEventListener('touchmove', () => clearTimeout(pressTimer));
-
-    // Добавляем обработчик клика для быстрого нажатия
-    container.addEventListener('click', () => getWeatherForCity(city));
+    container.addEventListener('touchmove', () => {
+      clearTimeout(pressTimer);
+      isLongPress = false; // Сбрасываем флаг
+    });
   } else {
     // На компьютерах используем правую кнопку мыши
     container.addEventListener('contextmenu', (e) => {
       e.preventDefault();
       showConfirmationPopup(city);
     });
+
+    // Короткое нажатие показывает погоду
+    container.addEventListener('click', () => getWeatherForCity(city));
   }
 }
 
