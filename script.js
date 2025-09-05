@@ -141,14 +141,19 @@ function setupDeleteHandlers(container, city) {
   let isMobile = /Mobi|Android/i.test(navigator.userAgent); // Проверка, мобильное ли устройство
 
   if (isMobile) {
-    // На мобильных устройствах используем долгое нажатие
     let pressTimer;
+
+    // При начале касания запускаем таймер
     container.addEventListener('touchstart', (e) => {
-      e.preventDefault();
+      e.preventDefault(); // Предотвращаем стандартное поведение
       pressTimer = setTimeout(() => showConfirmationPopup(city), 1000); // 1 секунда
     });
 
+    // При окончании касания очищаем таймер
     container.addEventListener('touchend', () => clearTimeout(pressTimer));
+
+    // Если пользователь убирает палец с элемента, также очищаем таймер
+    container.addEventListener('touchmove', () => clearTimeout(pressTimer));
   } else {
     // На компьютерах используем правую кнопку мыши
     container.addEventListener('contextmenu', (e) => {
