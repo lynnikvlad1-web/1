@@ -65,6 +65,7 @@ button:hover {
   justify-content: space-between; /* Кнопка слева, данные справа */
   align-items: center;
   padding: 10px 0; /* Вертикальные отступы */
+  border-bottom: 1px solid #ccc; /* Линия между строками */
 }
 
 /* Стили для кнопки с названием города */
@@ -77,6 +78,10 @@ button:hover {
   cursor: pointer; /* Изменение курсора при наведении */
   font-size: 16px; /* Размер шрифта */
   transition: background-color 0.2s ease; /* Плавный переход */
+  text-decoration: none; /* Убираем подчёркивание */
+  outline: none; /* Убираем рамку при фокусе */
+  -webkit-appearance: none; /* Убираем стандартные стили браузера */
+  appearance: none; /* Убираем стандартные стили браузера */
 }
 
 /* При нажатии на кнопку */
@@ -91,6 +96,7 @@ button:hover {
   margin-left: 15px; /* Отступ слева */
   font-size: 14px; /* Размер шрифта */
   color: #555; /* Цвет текста */
+  pointer-events: none; /* Делаем блок с данными неактивным для кликов */
 }
 
 /* Стиль для отдельных элементов данных о погоде */
