@@ -38,18 +38,40 @@ async function updateFavoritesList() {
       const weatherData = await fetchWeather(city);
 
       if (weatherData) {
-        // Создаем название города
-        const cityName = document.createElement('span');
-        cityName.textContent = normalizedCity;
+        // Создаем кнопку с названием города
+        const cityButton = document.createElement('button');
+        cityButton.textContent = normalizedCity;
 
-        // Создаем элемент для температуры
+        // Добавляем обработчик клика для показа погоды
+        cityButton.onclick = () => getWeatherForCity(city);
+
+        // Создаем контейнер для данных о погоде
+        const weatherDataContainer = document.createElement('div');
+        weatherDataContainer.className = 'weather-data';
+
+        // Добавляем температуру
         const temperature = document.createElement('span');
-        temperature.className = 'temperature';
-        temperature.textContent = `${Math.round(weatherData.main.temp)}°C`;
+        temperature.textContent = `${Math.round(weatherData.main.temp)}°C `;
+        weatherDataContainer.appendChild(temperature);
 
-        // Добавляем название города и температуру в контейнер
-        container.appendChild(cityName);
-        container.appendChild(temperature);
+        // Добавляем описание погоды
+        const description = document.createElement('span');
+        description.textContent = `${weatherData.weather[0].description} `;
+        weatherDataContainer.appendChild(description);
+
+        // Добавляем влажность
+        const humidity = document.createElement('span');
+        humidity.textContent = `${weatherData.main.humidity}% `;
+        weatherDataContainer.appendChild(humidity);
+
+        // Добавляем скорость ветра
+        const windSpeed = document.createElement('span');
+        windSpeed.textContent = `${weatherData.wind.speed} м/с`;
+        weatherDataContainer.appendChild(windSpeed);
+
+        // Добавляем кнопку и данные о погоде в контейнер
+        container.appendChild(cityButton);
+        container.appendChild(weatherDataContainer);
       } else {
         // Если погода не загружена, просто показываем название города
         const cityName = document.createElement('span');
@@ -57,8 +79,8 @@ async function updateFavoritesList() {
         container.appendChild(cityName);
       }
 
-      // Добавляем обработчики для взаимодействия
-      setupEventHandlers(container, city);
+      // Добавляем обработчики для удаления
+      setupDeleteHandlers(container, city);
 
       favoritesList.appendChild(container);
     } catch (error) {
@@ -133,45 +155,30 @@ function removeFromFavorites(city) {
   updateFavoritesList(); // Обновляем список на странице
 }
 
-// Функция для настройки обработчиков событий
-function setupEventHandlers(container, city) {
+// Функция для настройки обработчиков удаления
+function setupDeleteHandlers(container, city) {
   let isMobile = /Mobi|Android/i.test(navigator.userAgent); // Проверка, мобильное ли устройство
-  let isLongPress = false; // Флаг для долгого нажатия
-  let pressTimer;
 
   if (isMobile) {
+    let pressTimer;
+
     // При начале касания запускаем таймер
     container.addEventListener('touchstart', (e) => {
       e.preventDefault(); // Предотвращаем стандартное поведение
-      pressTimer = setTimeout(() => {
-        isLongPress = true; // Устанавливаем флаг долгого нажатия
-        showConfirmationPopup(city); // Показываем уведомление об удалении
-      }, 1000); // 1 секунда
+      pressTimer = setTimeout(() => showConfirmationPopup(city), 1000); // 1 секунда
     });
 
     // При окончании касания очищаем таймер
-    container.addEventListener('touchend', () => {
-      clearTimeout(pressTimer);
-      if (!isLongPress) {
-        getWeatherForCity(city); // Если не было долгого нажатия, показываем погоду
-      }
-      isLongPress = false; // Сбрасываем флаг
-    });
+    container.addEventListener('touchend', () => clearTimeout(pressTimer));
 
     // Если пользователь убирает палец с элемента, также очищаем таймер
-    container.addEventListener('touchmove', () => {
-      clearTimeout(pressTimer);
-      isLongPress = false; // Сбрасываем флаг
-    });
+    container.addEventListener('touchmove', () => clearTimeout(pressTimer));
   } else {
     // На компьютерах используем правую кнопку мыши
     container.addEventListener('contextmenu', (e) => {
       e.preventDefault();
       showConfirmationPopup(city);
     });
-
-    // Короткое нажатие показывает погоду
-    container.addEventListener('click', () => getWeatherForCity(city));
   }
 }
 
