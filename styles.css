@@ -1,52 +1,59 @@
+/* Основные стили для всей страницы */
 body {
-  font-family: Arial, sans-serif;
-  background-color: #f0f8ff;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+  font-family: Arial, sans-serif; /* Шрифт текста */
+  background-color: #f0f8ff; /* Цвет фона страницы */
+  margin: 0; /* Убираем внешние отступы */
+  padding: 0; /* Убираем внутренние отступы */
+  display: flex; /* Используем Flexbox для центрирования */
+  justify-content: center; /* Центрируем по горизонтали */
+  align-items: center; /* Центрируем по вертикали */
+  height: 100vh; /* Высота страницы равна высоте окна браузера */
 }
 
+/* Стили для контейнера */
 .container {
-  text-align: center;
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center; /* Выравнивание текста по центру */
+  background: white; /* Цвет фона контейнера */
+  padding: 20px; /* Внутренние отступы */
+  border-radius: 10px; /* Скругление углов */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Тень для эффекта объема */
+  max-width: 400px; /* Максимальная ширина контейнера */
+  width: 100%; /* Занимаем всю доступную ширину */
 }
 
+/* Стили для поля ввода */
 input {
-  padding: 10px;
-  width: 200px;
-  margin-bottom: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  padding: 10px; /* Внутренние отступы */
+  width: 100%; /* Поле занимает всю ширину */
+  margin-bottom: 10px; /* Отступ снизу */
+  border: 1px solid #ccc; /* Граница серого цвета */
+  border-radius: 5px; /* Скругление углов */
+  font-size: 16px; /* Размер шрифта */
 }
 
+/* Стили для кнопки */
 button {
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+  padding: 10px 20px; /* Внутренние отступы */
+  background-color: #007bff; /* Цвет фона кнопки */
+  color: white; /* Цвет текста */
+  border: none; /* Убираем границу */
+  border-radius: 5px; /* Скругление углов */
+  cursor: pointer; /* Изменение курсора при наведении */
+  font-size: 16px; /* Размер шрифта */
 }
 
+/* Стили для кнопки при наведении */
 button:hover {
-  background-color: #0056b3;
+  background-color: #0056b3; /* Темно-синий цвет при наведении */
 }
 
+/* Стили для блока с информацией о погоде */
 #weatherInfo {
-  margin-top: 20px;
-  font-size: 18px;
-}
-#favoritesSection {
-  margin-top: 20px;
+  margin-top: 20px; /* Отступ сверху */
+  font-size: 18px; /* Размер шрифта */
+  text-align: center; /* Выравнивание текста по левому краю */
 }
 
-/* Стили для контейнера избранных городов */
 /* Стили для списка избранных городов */
 #favoritesList {
   margin-top: 20px;
@@ -65,17 +72,24 @@ button:hover {
   margin-bottom: 10px;
   cursor: pointer;
   transition: background-color 0.2s ease;
+  -webkit-tap-highlight-color: transparent; /* Убираем эффект при нажатии на мобильных устройствах */
+  outline: none; /* Убираем рамку при фокусе */
 }
 
-/* При наведении на строку */
-#favoritesList .favorite-item:hover {
-  background-color: #e9ecef;
+/* При нажатии на строку */
+#favoritesList .favorite-item:active {
+  background-color: #e9ecef; /* Цвет при нажатии */
 }
 
 /* Стили для температуры */
 #favoritesList .favorite-item .temperature {
   font-size: 16px;
   color: #555;
+}
+
+/* Отключаем события для дочерних элементов внутри строки */
+#favoritesList .favorite-item > * {
+  pointer-events: none; /* Дочерние элементы не перехватывают события */
 }
 
 /* Стили для уведомления об удалении */
@@ -98,6 +112,7 @@ button:hover {
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  font-size: 16px;
 }
 
 .confirmation-popup button.yes {
