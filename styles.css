@@ -55,7 +55,7 @@ button:hover {
 #weatherInfo {
   margin-top: 20px; /* Отступ сверху */
   font-size: 18px; /* Размер шрифта */
-  text-align: left; /* Выравнивание текста по левому краю */
+  text-align: center; /* Выравнивание текста по левому краю */
 }
 
 /* Стили для списка избранных городов */
@@ -63,48 +63,88 @@ button:hover {
   margin-top: 20px;
 }
 
-/* Стили для строки избранного города */
+/* Стиль для строки с городом */
 #favoritesList .favorite-item {
   display: flex;
-  justify-content: space-between; /* Кнопка слева, данные справа */
+  justify-content: space-between;
   align-items: center;
-  padding: 10px 0; /* Вертикальные отступы */
-  border-bottom: 1px solid #ccc; /* Линия между строками */
+  padding: 10px;
+  background-color: transparent; /* Прозрачный фон по умолчанию */
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: background-color 0.2s ease; /* Плавный переход фона */
 }
 
-/* Стили для кнопки с названием города */
-#favoritesList .favorite-item button {
-  padding: 10px 15px; /* Внутренние отступы */
-  background-color: #ffffff; /* Белый фон кнопки */
+/* Изменение фона при наведении */
+#favoritesList .favorite-item:hover {
+  background-color: #f0f8ff; /* Светло-голубой фон при наведении */
+}
+
+/* Стили для текста города */
+#favoritesList .favorite-item .city-name {
+  font-size: 16px; /* Размер шрифта */
   color: #333; /* Цвет текста */
-  border: 1px solid #ccc; /* Граница серого цвета */
+}
+
+/* Стили для крестика */
+#favoritesList .favorite-item .delete-icon {
+  font-size: 18px; /* Размер шрифта */
+  color: #666 !important; /* Темно-серый цвет (используем !important для принудительного применения) */
+  cursor: pointer; /* Изменение курсора при наведении */
+  transition: color 0.2s ease; /* Плавный переход цвета */
+}
+
+/* Стили для крестика при наведении */
+#favoritesList .favorite-item .delete-icon:hover {
+  color: #dc3545 !important; /* Красный цвет при наведении (используем !important для принудительного применения) */
+}
+
+/* Стили для уведомления об удалении */
+.confirmation-popup {
+  position: fixed; /* Фиксированное положение */
+  top: 50%; /* По центру по вертикали */
+  left: 50%; /* По центру по горизонтали */
+  transform: translate(-50%, -50%); /* Центрирование */
+  background-color: white; /* Цвет фона */
+  padding: 20px; /* Внутренние отступы */
+  border-radius: 10px; /* Скругление углов */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Тень для эффекта объема */
+  z-index: 1000; /* Устанавливаем высокий z-index */
+  text-align: center; /* Выравнивание текста по центру */
+}
+
+.confirmation-popup p {
+  margin-bottom: 15px; /* Отступ между текстом и кнопками */
+  font-size: 18px; /* Размер шрифта */
+  color: #333; /* Цвет текста */
+}
+
+.confirmation-popup button {
+  padding: 10px 20px; /* Внутренние отступы */
+  margin: 5px; /* Отступы между кнопками */
+  border: none; /* Убираем границу */
   border-radius: 5px; /* Скругление углов */
   cursor: pointer; /* Изменение курсора при наведении */
   font-size: 16px; /* Размер шрифта */
   transition: background-color 0.2s ease; /* Плавный переход */
-  text-decoration: none; /* Убираем подчёркивание */
-  outline: none; /* Убираем рамку при фокусе */
-  -webkit-appearance: none; /* Убираем стандартные стили браузера */
-  appearance: none; /* Убираем стандартные стили браузера */
-  box-shadow: none; /* Убираем тени */
 }
 
-/* При нажатии на кнопку */
-#favoritesList .favorite-item button:active {
-  background-color: #e9ecef; /* Цвет при нажатии */
+.confirmation-popup button.yes {
+  background-color: #dc3545; /* Красный цвет для кнопки "Да" */
+  color: white; /* Белый текст */
 }
 
-/* Стили для блока с данными о погоде */
-#favoritesList .weather-data {
-  display: flex; /* Элементы в одну строку */
-  align-items: center; /* Выравнивание по центру */
-  margin-left: 15px; /* Отступ слева */
-  font-size: 14px; /* Размер шрифта */
-  color: #555; /* Цвет текста */
-  pointer-events: none; /* Делаем блок с данными неактивным для кликов */
+.confirmation-popup button.yes:hover {
+  background-color: #b02a37; /* Темно-красный при наведении */
 }
 
-/* Стиль для отдельных элементов данных о погоде */
-#favoritesList .weather-data span {
-  margin-right: 10px; /* Отступ между элементами */
+.confirmation-popup button.no {
+  background-color: #007bff; /* Синий цвет для кнопки "Нет" */
+  color: white; /* Белый текст */
+}
+
+.confirmation-popup button.no:hover {
+  background-color: #0056b3; /* Темно-синий при наведении */
 }
