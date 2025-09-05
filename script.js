@@ -166,26 +166,44 @@ function removeFromFavorites(city) {
 function setupDeleteHandlers(container, city) {
   let isMobile = /Mobi|Android/i.test(navigator.userAgent); // Проверка, мобильное ли устройство
   let isTelegram = window.Telegram && window.Telegram.WebApp; // Проверка, запущено ли в Telegram Mini Apps
+  let isLongPress = false; // Флаг для долгого нажатия
+  let pressTimer;
 
   if (isMobile || isTelegram) {
-    let pressTimer;
-
     // При начале касания запускаем таймер
     container.addEventListener('touchstart', (e) => {
       e.preventDefault(); // Предотвращаем стандартное поведение
-      pressTimer = setTimeout(() => showConfirmationPopup(city), 1000); // 1 секунда
+      pressTimer = setTimeout(() => {
+        isLongPress = true; // Устанавливаем флаг долгого нажатия
+        showConfirmationPopup(city); // Показываем уведомление об удалении
+      }, 1000); // 1 секунда
     });
 
     // При окончании касания очищаем таймер
-    container.addEventListener('touchend', () => clearTimeout(pressTimer));
+    container.addEventListener('touchend', () => {
+      clearTimeout(pressTimer);
+      if (!isLongPress) {
+        getWeatherForCity(city); // Если не было долгого нажатия, показываем погоду
+      }
+      isLongPress = false; // Сбрасываем флаг
+    });
 
     // Если пользователь убирает палец с элемента, также очищаем таймер
-    container.addEventListener('touchmove', () => clearTimeout(pressTimer));
+    container.addEventListener('touchmove', () => {
+      clearTimeout(pressTimer);
+      isLongPress = false; // Сбрасываем флаг
+    });
   } else {
     // На компьютерах используем правую кнопку мыши
     container.addEventListener('contextmenu', (e) => {
       e.preventDefault();
       showConfirmationPopup(city);
+    });
+
+    // Короткое нажатие показывает погоду
+    container.addEventListener('click', (e) => {
+      e.stopPropagation(); // Предотвращаем всплытие события
+      getWeatherForCity(city);
     });
   }
 }
