@@ -94,11 +94,15 @@ button:hover {
   color: #666 !important; /* Темно-серый цвет (используем !important для принудительного применения) */
   cursor: pointer; /* Изменение курсора при наведении */
   transition: color 0.2s ease; /* Плавный переход цвета */
+  -webkit-appearance: none; /* Убираем стандартные стили браузера */
+  appearance: none; /* Убираем стандартные стили браузера */
 }
 
 /* Стили для крестика при наведении */
 #favoritesList .favorite-item .delete-icon:hover {
   color: #dc3545 !important; /* Красный цвет при наведении (используем !important для принудительного применения) */
+  -webkit-appearance: none; /* Убираем стандартные стили браузера */
+  appearance: none; /* Убираем стандартные стили браузера */
 }
 
 /* Стили для уведомления об удалении */
