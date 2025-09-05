@@ -62,65 +62,86 @@ button:hover {
 /* Стили для строки избранного города */
 #favoritesList .favorite-item {
   display: flex;
-  justify-content: space-between; /* Город слева, температура справа */
+  justify-content: space-between; /* Кнопка слева, данные справа */
   align-items: center;
-  padding: 15px;
-  font-size: 18px;
-  color: #333;
-  background-color: #f9f9f9;
-  border-radius: 5px;
-  margin-bottom: 10px;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-  -webkit-tap-highlight-color: transparent; /* Убираем эффект при нажатии на мобильных устройствах */
-  outline: none; /* Убираем рамку при фокусе */
+  padding: 10px 0; /* Вертикальные отступы */
 }
 
-/* При нажатии на строку */
-#favoritesList .favorite-item:active {
+/* Стили для кнопки с названием города */
+#favoritesList .favorite-item button {
+  padding: 10px 15px; /* Внутренние отступы */
+  background-color: #f9f9f9; /* Цвет фона кнопки */
+  color: #333; /* Цвет текста */
+  border: 1px solid #ccc; /* Граница серого цвета */
+  border-radius: 5px; /* Скругление углов */
+  cursor: pointer; /* Изменение курсора при наведении */
+  font-size: 16px; /* Размер шрифта */
+  transition: background-color 0.2s ease; /* Плавный переход */
+}
+
+/* При нажатии на кнопку */
+#favoritesList .favorite-item button:active {
   background-color: #e9ecef; /* Цвет при нажатии */
 }
 
-/* Стили для температуры */
-#favoritesList .favorite-item .temperature {
-  font-size: 16px;
-  color: #555;
+/* Стили для блока с данными о погоде */
+#favoritesList .weather-data {
+  display: flex; /* Элементы в одну строку */
+  align-items: center; /* Выравнивание по центру */
+  margin-left: 15px; /* Отступ слева */
+  font-size: 14px; /* Размер шрифта */
+  color: #555; /* Цвет текста */
 }
 
-/* Отключаем события для дочерних элементов внутри строки */
-#favoritesList .favorite-item > * {
-  pointer-events: none; /* Дочерние элементы не перехватывают события */
+/* Стиль для отдельных элементов данных о погоде */
+#favoritesList .weather-data span {
+  margin-right: 10px; /* Отступ между элементами */
 }
 
 /* Стили для уведомления об удалении */
 .confirmation-popup {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: white;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  z-index: 1000;
-  text-align: center;
+  position: fixed; /* Фиксированное положение */
+  top: 50%; /* По центру по вертикали */
+  left: 50%; /* По центру по горизонтали */
+  transform: translate(-50%, -50%); /* Центрирование */
+  background-color: white; /* Цвет фона */
+  padding: 20px; /* Внутренние отступы */
+  border-radius: 10px; /* Скругление углов */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Тень для эффекта объема */
+  z-index: 1000; /* Устанавливаем высокий z-index */
+  text-align: center; /* Выравнивание текста по центру */
+}
+
+.confirmation-popup p {
+  margin-bottom: 15px; /* Отступ между текстом и кнопками */
+  font-size: 18px; /* Размер шрифта */
+  color: #333; /* Цвет текста */
 }
 
 .confirmation-popup button {
-  margin: 10px;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
+  padding: 10px 20px; /* Внутренние отступы */
+  margin: 5px; /* Отступы между кнопками */
+  border: none; /* Убираем границу */
+  border-radius: 5px; /* Скругление углов */
+  cursor: pointer; /* Изменение курсора при наведении */
+  font-size: 16px; /* Размер шрифта */
+  transition: background-color 0.2s ease; /* Плавный переход */
 }
 
 .confirmation-popup button.yes {
-  background-color: #dc3545;
-  color: white;
+  background-color: #dc3545; /* Красный цвет для кнопки "Да" */
+  color: white; /* Белый текст */
+}
+
+.confirmation-popup button.yes:hover {
+  background-color: #b02a37; /* Темно-красный при наведении */
 }
 
 .confirmation-popup button.no {
-  background-color: #007bff;
-  color: white;
+  background-color: #007bff; /* Синий цвет для кнопки "Нет" */
+  color: white; /* Белый текст */
+}
+
+.confirmation-popup button.no:hover {
+  background-color: #0056b3; /* Темно-синий при наведении */
 }
