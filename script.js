@@ -154,6 +154,9 @@ function setupDeleteHandlers(container, city) {
 
     // Если пользователь убирает палец с элемента, также очищаем таймер
     container.addEventListener('touchmove', () => clearTimeout(pressTimer));
+
+    // Добавляем обработчик клика для быстрого нажатия
+    container.addEventListener('click', () => getWeatherForCity(city));
   } else {
     // На компьютерах используем правую кнопку мыши
     container.addEventListener('contextmenu', (e) => {
