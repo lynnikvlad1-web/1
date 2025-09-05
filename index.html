@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
- <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Погода</title>
@@ -9,19 +8,21 @@
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
-<div class="container">
-  <h1>Погода</h1>
-  <input type="text" id="cityInput" placeholder="Введите город">
-  <button id="getWeatherBtn">Получить погоду</button>
-  <div id="weatherInfo"></div>
-  <!-- Блок для избранных городов -->
-  <div id="favoritesSection">
-    <h2>Избранные города</h2>
-    <div id="favoritesList"></div>
+  <div class="container">
+    <h1>Погода</h1>
+    <input type="text" id="cityInput" placeholder="Введите город">
+    <button id="getWeatherBtn">Получить погоду</button>
+    <div id="weatherInfo"></div>
+
+    <!-- Блок для избранных городов -->
+    <div id="favoritesSection">
+      <h2>Избранные города</h2>
+      <div id="favoritesList"></div>
+    </div>
+
+    <!-- Кнопка для добавления города в избранное -->
+    <button id="addToFavoritesBtn" style="display: none;">Добавить в избранное</button>
   </div>
-  <!-- Кнопка для добавления города в избранное -->
-  <button id="addToFavoritesBtn" style="display: none;">Добавить в избранное</button>
-</div>
   <script src="script.js"></script>
 </body>
 </html>
