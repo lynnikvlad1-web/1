@@ -1,3 +1,10 @@
+// Инициализация Telegram Web App
+const tg = window.Telegram.WebApp;
+
+// Настройка цвета фона и заголовка
+tg.setBackgroundColor('#f0f8ff'); // Цвет фона приложения
+tg.setHeaderColor('secondary_bg_color'); // Цвет заголовка
+
 // Функция для нормализации названия города (первая буква заглавная)
 function normalizeCityName(city) {
   if (!city) return ''; // Если строка пустая, возвращаем пустую строку
@@ -158,8 +165,9 @@ function removeFromFavorites(city) {
 // Функция для настройки обработчиков удаления
 function setupDeleteHandlers(container, city) {
   let isMobile = /Mobi|Android/i.test(navigator.userAgent); // Проверка, мобильное ли устройство
+  let isTelegram = window.Telegram && window.Telegram.WebApp; // Проверка, запущено ли в Telegram Mini Apps
 
-  if (isMobile) {
+  if (isMobile || isTelegram) {
     let pressTimer;
 
     // При начале касания запускаем таймер
