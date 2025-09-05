@@ -42,3 +42,70 @@ button:hover {
   margin-top: 20px;
   font-size: 18px;
 }
+#favoritesSection {
+  margin-top: 20px;
+}
+
+/* Стили для контейнера избранных городов */
+/* Стили для списка избранных городов */
+#favoritesList {
+  margin-top: 20px;
+}
+
+/* Стили для строки избранного города */
+#favoritesList .favorite-item {
+  display: flex;
+  justify-content: space-between; /* Город слева, температура справа */
+  align-items: center;
+  padding: 15px;
+  font-size: 18px;
+  color: #333;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+/* При наведении на строку */
+#favoritesList .favorite-item:hover {
+  background-color: #e9ecef;
+}
+
+/* Стили для температуры */
+#favoritesList .favorite-item .temperature {
+  font-size: 16px;
+  color: #555;
+}
+
+/* Стили для уведомления об удалении */
+.confirmation-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  text-align: center;
+}
+
+.confirmation-popup button {
+  margin: 10px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.confirmation-popup button.yes {
+  background-color: #dc3545;
+  color: white;
+}
+
+.confirmation-popup button.no {
+  background-color: #007bff;
+  color: white;
+}
