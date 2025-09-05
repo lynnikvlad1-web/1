@@ -4,6 +4,8 @@ const tg = window.Telegram.WebApp;
 // Настройка цвета фона и заголовка
 tg.setBackgroundColor('#f0f8ff'); // Цвет фона приложения
 tg.setHeaderColor('secondary_bg_color'); // Цвет заголовка
+tg.expand(); // Расширяем приложение на весь экран
+tg.ready(); // Готовим приложение к работе
 
 // Функция для нормализации названия города (первая буква заглавная)
 function normalizeCityName(city) {
@@ -30,70 +32,45 @@ function saveFavorites(favorites) {
 }
 
 // Функция для обновления списка избранных городов на странице
-async function updateFavoritesList() {
+function updateFavoritesList() {
   const favorites = getFavorites();
   const favoritesList = document.getElementById('favoritesList');
   favoritesList.innerHTML = ''; // Очищаем список
 
+  if (favorites.length === 0) {
+    console.log('Список избранных городов пуст');
+    return;
+  }
+
   for (const city of favorites) {
     const normalizedCity = normalizeCityName(city); // Нормализуем название города
-    const container = document.createElement('div'); // Контейнер для строки города
+
+    // Создаем контейнер для строки города
+    const container = document.createElement('div');
     container.className = 'favorite-item';
 
-    try {
-      // Загружаем погоду для города
-      const weatherData = await fetchWeather(city);
+    // Добавляем название города
+    const cityName = document.createElement('span');
+    cityName.className = 'city-name';
+    cityName.textContent = normalizedCity;
 
-      if (weatherData) {
-        // Создаем кнопку с названием города
-        const cityButton = document.createElement('button');
-        cityButton.textContent = normalizedCity;
+    // Добавляем крестик для удаления
+    const deleteIcon = document.createElement('span');
+    deleteIcon.className = 'delete-icon';
+    deleteIcon.textContent = '❌';
+    deleteIcon.onclick = (e) => {
+      e.stopPropagation(); // Предотвращаем всплытие события
+      showConfirmationPopup(normalizedCity, container); // Показываем уведомление об удалении
+    };
 
-        // Добавляем обработчик клика для показа погоды
-        cityButton.onclick = () => getWeatherForCity(city);
+    // Добавляем обработчик клика на саму кнопку
+    container.onclick = () => getWeatherForCity(city);
 
-        // Создаем контейнер для данных о погоде
-        const weatherDataContainer = document.createElement('div');
-        weatherDataContainer.className = 'weather-data';
+    // Добавляем элементы в контейнер
+    container.appendChild(cityName);
+    container.appendChild(deleteIcon);
 
-        // Добавляем температуру
-        const temperature = document.createElement('span');
-        temperature.textContent = `${Math.round(weatherData.main.temp)}°C `;
-        weatherDataContainer.appendChild(temperature);
-
-        // Добавляем описание погоды
-        const description = document.createElement('span');
-        description.textContent = `${weatherData.weather[0].description} `;
-        weatherDataContainer.appendChild(description);
-
-        // Добавляем влажность
-        const humidity = document.createElement('span');
-        humidity.textContent = `${weatherData.main.humidity}% `;
-        weatherDataContainer.appendChild(humidity);
-
-        // Добавляем скорость ветра
-        const windSpeed = document.createElement('span');
-        windSpeed.textContent = `${weatherData.wind.speed} м/с`;
-        weatherDataContainer.appendChild(windSpeed);
-
-        // Добавляем кнопку и данные о погоде в контейнер
-        container.appendChild(cityButton);
-        container.appendChild(weatherDataContainer);
-      } else {
-        // Если погода не загружена, просто показываем название города
-        const cityName = document.createElement('span');
-        cityName.textContent = normalizedCity;
-        container.appendChild(cityName);
-      }
-
-      // Добавляем обработчики для удаления
-      setupDeleteHandlers(container, city);
-
-      favoritesList.appendChild(container);
-    } catch (error) {
-      console.error(`Ошибка при обработке города ${city}:`, error.message);
-      continue; // Пропускаем этот город и переходим к следующему
-    }
+    favoritesList.appendChild(container); // Добавляем контейнер в список
   }
 }
 
@@ -138,19 +115,6 @@ function getWeatherForCity(city) {
   });
 }
 
-// Функция для добавления города в избранное
-function addToFavorites(city) {
-  const normalizedCity = normalizeCityName(city); // Нормализуем название города
-  const favorites = getFavorites();
-
-  // Проверяем, что город еще не добавлен
-  if (!favorites.includes(normalizedCity)) {
-    favorites.push(normalizedCity); // Добавляем нормализованное название
-    saveFavorites(favorites);
-    updateFavoritesList(); // Обновляем список на странице
-  }
-}
-
 // Функция для удаления города из избранного
 function removeFromFavorites(city) {
   const normalizedCity = normalizeCityName(city); // Нормализуем название города
@@ -162,54 +126,11 @@ function removeFromFavorites(city) {
   updateFavoritesList(); // Обновляем список на странице
 }
 
-// Функция для настройки обработчиков удаления
-function setupDeleteHandlers(container, city) {
-  let isMobile = /Mobi|Android/i.test(navigator.userAgent); // Проверка, мобильное ли устройство
-  let isTelegram = window.Telegram && window.Telegram.WebApp; // Проверка, запущено ли в Telegram Mini Apps
-  let isLongPress = false; // Флаг для долгого нажатия
-  let pressTimer;
-
-  if (isMobile || isTelegram) {
-    // При начале касания запускаем таймер
-    container.addEventListener('touchstart', (e) => {
-      e.preventDefault(); // Предотвращаем стандартное поведение
-      pressTimer = setTimeout(() => {
-        isLongPress = true; // Устанавливаем флаг долгого нажатия
-        showConfirmationPopup(city); // Показываем уведомление об удалении
-      }, 1000); // 1 секунда
-    });
-
-    // При окончании касания очищаем таймер
-    container.addEventListener('touchend', () => {
-      clearTimeout(pressTimer);
-      if (!isLongPress) {
-        getWeatherForCity(city); // Если не было долгого нажатия, показываем погоду
-      }
-      isLongPress = false; // Сбрасываем флаг
-    });
-
-    // Если пользователь убирает палец с элемента, также очищаем таймер
-    container.addEventListener('touchmove', () => {
-      clearTimeout(pressTimer);
-      isLongPress = false; // Сбрасываем флаг
-    });
-  } else {
-    // На компьютерах используем правую кнопку мыши
-    container.addEventListener('contextmenu', (e) => {
-      e.preventDefault();
-      showConfirmationPopup(city);
-    });
-
-    // Короткое нажатие показывает погоду
-    container.addEventListener('click', (e) => {
-      e.stopPropagation(); // Предотвращаем всплытие события
-      getWeatherForCity(city);
-    });
-  }
-}
-
 // Функция для показа уведомления об удалении
-function showConfirmationPopup(city) {
+function showConfirmationPopup(city, container) {
+  console.log(`Создание уведомления для города: ${city}`);
+
+  // Создаем элемент для уведомления
   const popup = document.createElement('div');
   popup.className = 'confirmation-popup';
   popup.innerHTML = `
@@ -218,17 +139,34 @@ function showConfirmationPopup(city) {
     <button class="no">Нет</button>
   `;
 
+  console.log('Добавляем уведомление на страницу');
   document.body.appendChild(popup);
 
-  // Обработчики кнопок "Да" и "Нет"
+  // Обработчик для кнопки "Да"
   popup.querySelector('.yes').onclick = () => {
-    removeFromFavorites(city);
-    document.body.removeChild(popup);
+    console.log('Кнопка "Да" нажата');
+    removeFromFavorites(city); // Удаляем город из избранного
+    document.body.removeChild(popup); // Убираем уведомление
   };
 
+  // Обработчик для кнопки "Нет"
   popup.querySelector('.no').onclick = () => {
-    document.body.removeChild(popup);
+    console.log('Кнопка "Нет" нажата');
+    document.body.removeChild(popup); // Убираем уведомление
   };
+}
+
+// Функция для добавления города в избранное
+function addToFavorites(city) {
+  const normalizedCity = normalizeCityName(city); // Нормализуем название города
+  const favorites = getFavorites();
+
+  // Проверяем, что город еще не добавлен
+  if (!favorites.includes(normalizedCity)) {
+    favorites.push(normalizedCity); // Добавляем нормализованное название
+    saveFavorites(favorites);
+    updateFavoritesList(); // Обновляем список на странице
+  }
 }
 
 // Добавляем обработчик события на кнопку "Получить погоду"
