@@ -1,5 +1,5 @@
 document.getElementById('getWeatherBtn').addEventListener('click', function () {
-  const city = document.getElementById('cityInput').value;
+  const city = document.getElementById('cityInput').value.trim();
   if (!city) {
     alert('Введите название города');
     return;
@@ -39,3 +39,4 @@ document.getElementById('getWeatherBtn').addEventListener('click', function () {
     });
 
 });
+
