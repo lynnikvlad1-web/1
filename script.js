@@ -47,9 +47,6 @@ async function updateFavoritesList() {
         temperature.className = 'temperature';
         temperature.textContent = `${Math.round(weatherData.main.temp)}°C`;
 
-        // Добавляем обработчик клика для показа погоды
-        container.onclick = () => getWeatherForCity(city);
-
         // Добавляем название города и температуру в контейнер
         container.appendChild(cityName);
         container.appendChild(temperature);
@@ -60,14 +57,17 @@ async function updateFavoritesList() {
         container.appendChild(cityName);
       }
 
+      // Добавляем обработчик клика для показа погоды
+      container.onclick = () => getWeatherForCity(city);
+
       // Добавляем обработчики для удаления
       setupDeleteHandlers(container, city);
+
+      favoritesList.appendChild(container);
     } catch (error) {
       console.error(`Ошибка при обработке города ${city}:`, error.message);
       continue; // Пропускаем этот город и переходим к следующему
     }
-
-    favoritesList.appendChild(container);
   }
 }
 
